@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zodiac Calendar Converter</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: flex-start;
+            align-items: flex-start;
+            padding: 20px;
+        }
+
+        h1 { color: #333; margin-bottom: 10px; font-size: 28px; }
+
+        .subtitle { color: #666; margin-bottom: 20px; font-size: 14px; }
+
+        .input-group { margin-bottom: 20px; }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: 500;
+        }
+
+        input[type="date"], .label-field {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        input[type="date"]:focus { border-color: #667eea; }
+
+        .hidden { display: none; }
+
+        .zodiac-list { list-style: none; font-size: 13px; color: #555; line-height: 1.8; }
+        .zodiac-list li { padding: 4px 0; border-bottom: 1px solid #e0e0e0; }
+        .zodiac-list li:last-child { border-bottom: none; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Zodiac Calendar</h1>
+        <p class="subtitle">Convert date to Zodiac-based calendar</p>
+        <div class="input-group">
+            <label for="gregorian-date">Gregorian:</label>
+            <input type="date" id="gregorian-date" value="">
+        </div>
+        <div id="result" class="hidden input-group">
+            <label for="zodiac-date">Zodiac:</label>
+            <div id="zodiac-date" class="label-field"></div>
+        </div>
+        <ul class="zodiac-list">
+            <li>♈ Aries: March 21 - April 19</li>
+            <li>♉ Taurus: April 20 - May 20</li>
+            <li>♊ Gemini: May 21 - June 20</li>
+            <li>♋ Cancer: June 21 - July 22</li>
+            <li>♌ Leo: July 23 - August 22</li>
+            <li>♍ Virgo: August 23 - September 22</li>
+            <li>♎ Libra: September 23 - October 22</li>
+            <li>♏ Scorpio: October 23 - November 21</li>
+            <li>♐ Sagittarius: November 22 - December 21</li>
+            <li>♑ Capricorn: December 22 - January 19</li>
+            <li>♒ Aquarius: January 20 - February 18</li>
+            <li>♓ Pisces: February 19 - March 20</li>
+        </ul>
+    </div>
+
+    <script>
+        // Zodiac sign data with start dates (month, day) and symbols
+        const zodiacSigns = [
+            { name: 'Aries', symbol: '♈', startMonth: 3, startDay: 21, endMonth: 4, endDay: 19 },
+            { name: 'Taurus', symbol: '♉', startMonth: 4, startDay: 20, endMonth: 5, endDay: 20 },
+            { name: 'Gemini', symbol: '♊', startMonth: 5, startDay: 21, endMonth: 6, endDay: 20 },
+            { name: 'Cancer', symbol: '♋', startMonth: 6, startDay: 21, endMonth: 7, endDay: 22 },
+            { name: 'Leo', symbol: '♌', startMonth: 7, startDay: 23, endMonth: 8, endDay: 22 },
+            { name: 'Virgo', symbol: '♍', startMonth: 8, startDay: 23, endMonth: 9, endDay: 22 },
+            { name: 'Libra', symbol: '♎', startMonth: 9, startDay: 23, endMonth: 10, endDay: 22 },
+            { name: 'Scorpio', symbol: '♏', startMonth: 10, startDay: 23, endMonth: 11, endDay: 21 },
+            { name: 'Sagittarius', symbol: '♐', startMonth: 11, startDay: 22, endMonth: 12, endDay: 21 },
+            { name: 'Capricorn', symbol: '♑', startMonth: 12, startDay: 22, endMonth: 1, endDay: 19 },
+            { name: 'Aquarius', symbol: '♒', startMonth: 1, startDay: 20, endMonth: 2, endDay: 18 },
+            { name: 'Pisces', symbol: '♓', startMonth: 2, startDay: 19, endMonth: 3, endDay: 20 }
+        ];
+
+        function getZodiacSign(month, day) {
+            for (let sign of zodiacSigns) {
+                // Handle signs that cross year boundary (like Capricorn)
+                if (sign.startMonth > sign.endMonth) {
+                    if (month === sign.startMonth && day >= sign.startDay) {
+                        return sign;
+                    }
+                    if (month === sign.endMonth && day <= sign.endDay) {
+                        return sign;
+                    }
+                } else {
+                    // Normal case
+                    if (month === sign.startMonth && day >= sign.startDay) {
+                        return sign;
+                    }
+                    if (month === sign.endMonth && day <= sign.endDay) {
+                        return sign;
+                    }
+                    if (month > sign.startMonth && month < sign.endMonth) {
+                        return sign;
+                    }
+                }
+            }
+            return null;
+        }
+
+        function calculateZodiacDay(year, month, day) {
+            const sign = getZodiacSign(month, day);
+            if (!sign) return null;
+
+            // Create date for the start of this zodiac sign
+            let startYear = year;
+
+            // If the sign crosses year boundary and we're in the early months,
+            // the sign started in the previous year
+            if (sign.startMonth > sign.endMonth && month <= sign.endMonth) {
+                startYear = year - 1;
+            }
+
+            const signStartDate = new Date(startYear, sign.startMonth - 1, sign.startDay);
+            const currentDate = new Date(year, month - 1, day);
+
+            // Calculate days difference
+            const diffTime = currentDate - signStartDate;
+            const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24)) + 1; // +1 to make it 1-indexed
+
+            return {
+                sign: sign,
+                day: diffDays
+            };
+        }
+
+        function convertDate() {
+            const dateInput = document.getElementById('gregorian-date');
+            const resultBox = document.getElementById('result');
+            const zodiacDateEl = document.getElementById('zodiac-date');
+
+            if (!dateInput.value) {
+                resultBox.classList.add('hidden');
+                return;
+            }
+
+            const date = new Date(dateInput.value);
+            const year = date.getFullYear();
+            const month = date.getMonth() + 1;
+            const day = date.getDate();
+
+            const zodiacResult = calculateZodiacDay(year, month, day);
+
+            if (zodiacResult) {
+                zodiacDateEl.textContent = `${zodiacResult.sign.symbol} ${zodiacResult.sign.name} ${zodiacResult.day}`;
+                resultBox.classList.remove('hidden');
+            }
+        }
+
+        // Set today's date as default
+        const today = new Date();
+        const yyyy = today.getFullYear();
+        const mm = String(today.getMonth() + 1).padStart(2, '0');
+        const dd = String(today.getDate()).padStart(2, '0');
+        document.getElementById('gregorian-date').value = `${yyyy}-${mm}-${dd}`;
+
+        // Add event listener
+        document.getElementById('gregorian-date').addEventListener('change', convertDate);
+
+        // Convert the default date
+        convertDate();
+    </script>
+</body>
+</html>
