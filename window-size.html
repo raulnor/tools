@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Window Size</title>
+    <style>
+        body {
+            margin: 0;
+            display: flex; align-items: center; justify-content: center;
+            height: 100vh;
+            font-family: system-ui, sans-serif;
+            background: #fff; color: #000;
+        }
+        @media (prefers-color-scheme: dark) {
+            body { background: #000; color: #fff; }
+        }
+    </style>
+</head>
+
+<body>
+    <div style="text-align:center;">
+        <div id="px" style="font-size: 2rem;"></div>
+        <div id="dp" style="font-size: 1rem; margin-top: 0.5rem;"></div>
+    </div>
+    <script>
+        function update() {
+            document.getElementById('px').textContent = window.innerWidth + ' x ' + window.innerHeight;
+            document.getElementById('dp').textContent = window.devicePixelRatio.toFixed(2) + ' dpr';
+        }
+        update();
+        window.addEventListener('resize', update);
+    </script>
+</body>
+
+</html>
