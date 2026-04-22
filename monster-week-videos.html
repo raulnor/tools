@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monster Week Videos</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&family=JetBrains+Mono:wght@400;600&display=swap');
+
+        :root {
+            --ink: #1a1208;
+            --parchment: #f2ead8;
+            --parchment-dark: #e4d9c0;
+            --parchment-darker: #d4c9a8;
+            --accent: #8b1a1a;
+            --accent-light: #c0392b;
+            --gold: #c8940a;
+            --gold-light: #e8b84b;
+            --muted: #6b5c3e;
+            --border: #b8a882;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background: var(--ink);
+            font-family: 'Crimson Pro', Georgia, serif;
+            color: var(--ink);
+            min-height: 100vh;
+            padding: 2rem;
+            background-image:
+                radial-gradient(ellipse at 20% 0%, #2d1f0a 0%, transparent 60%),
+                radial-gradient(ellipse at 80% 100%, #1a0d00 0%, transparent 60%);
+        }
+
+        .page {
+            max-width: 1100px;
+            margin: 0 auto;
+            background: var(--parchment);
+            border: 2px solid var(--border);
+            box-shadow: 0 0 0 6px var(--ink), 0 0 40px rgba(0, 0, 0, 0.8), inset 0 0 80px rgba(180, 150, 80, 0.08);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .page::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image:
+                url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .header {
+            background: var(--ink);
+            padding: 2.5rem 2rem 2rem;
+            text-align: center;
+            position: relative;
+            border-bottom: 4px double var(--gold);
+        }
+
+        .header::after {
+            content: '❧ ✦ ❧';
+            display: block;
+            color: var(--gold);
+            font-size: 1.1rem;
+            margin-top: 1rem;
+            letter-spacing: 0.5rem;
+        }
+
+        h1 {
+            font-family: 'Cinzel', serif;
+            color: var(--gold-light);
+            font-size: clamp(2.2rem, 5vw, 3.5rem);
+            line-height: 1;
+            text-shadow: 0 0 30px rgba(200, 148, 10, 0.4), 2px 2px 0 rgba(0, 0, 0, 0.5);
+            letter-spacing: 0.02em;
+        }
+
+        .subtitle {
+            color: var(--parchment-darker);
+            font-style: italic;
+            font-size: 1rem;
+            margin-top: 0.5rem;
+            letter-spacing: 0.08em;
+            opacity: 0.8;
+        }
+
+        .setup-section {
+            padding: 2rem;
+            position: relative;
+            z-index: 1;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .setup-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            align-items: end;
+        }
+
+        @media (max-width: 640px) {
+            .setup-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        label {
+            display: block;
+            font-size: 0.75rem;
+            font-family: 'JetBrains Mono', monospace;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            color: var(--muted);
+            margin-bottom: 0.4rem;
+        }
+
+        input[type="text"],
+        input[type="password"] {
+            width: 100%;
+            padding: 0.6rem 0.8rem;
+            background: var(--parchment-dark);
+            border: 1px solid var(--border);
+            border-bottom: 2px solid var(--muted);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            color: var(--ink);
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        input:focus {
+            border-color: var(--gold);
+            border-bottom-color: var(--accent);
+            background: #fff;
+        }
+
+        .btn {
+            padding: 0.65rem 1.6rem;
+            background: var(--accent);
+            color: var(--parchment);
+            border: none;
+            font-family: 'Cinzel', serif;
+            font-size: 0.85rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.1s;
+            white-space: nowrap;
+        }
+
+        .btn:hover {
+            background: var(--accent-light);
+        }
+
+        .btn:active {
+            transform: translateY(1px);
+        }
+
+        .btn:disabled {
+            background: var(--muted);
+            cursor: not-allowed;
+        }
+
+        .controls {
+            padding: 1.2rem 2rem;
+            position: relative;
+            z-index: 1;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            align-items: center;
+            background: var(--parchment-dark);
+        }
+
+        .controls-label {
+            font-size: 0.7rem;
+            font-family: 'JetBrains Mono', monospace;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--muted);
+            margin-right: 0.25rem;
+        }
+
+        select {
+            padding: 0.35rem 0.6rem;
+            background: var(--parchment);
+            border: 1px solid var(--border);
+            font-family: 'Crimson Pro', serif;
+            font-size: 0.9rem;
+            color: var(--ink);
+            cursor: pointer;
+        }
+
+        input[type="search"] {
+            padding: 0.35rem 0.7rem;
+            background: var(--parchment);
+            border: 1px solid var(--border);
+            font-family: 'Crimson Pro', serif;
+            font-size: 0.9rem;
+            color: var(--ink);
+            width: 200px;
+            outline: none;
+        }
+
+        input[type="search"]:focus {
+            border-color: var(--gold);
+        }
+
+        .stats-bar {
+            display: flex;
+            gap: 2rem;
+            padding: 0.8rem 2rem;
+            background: var(--ink);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--gold);
+            letter-spacing: 0.06em;
+            border-bottom: 2px solid var(--gold);
+            flex-wrap: wrap;
+        }
+
+        .stat {
+            color: var(--parchment-darker);
+        }
+
+        .stat span {
+            color: var(--gold-light);
+            font-weight: 600;
+        }
+
+        .results {
+            position: relative;
+            z-index: 1;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.92rem;
+        }
+
+        thead {
+            background: var(--ink);
+            color: var(--gold);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.68rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        th {
+            padding: 0.7rem 1rem;
+            text-align: left;
+            cursor: pointer;
+            user-select: none;
+            white-space: nowrap;
+            border-right: 1px solid #2a2010;
+            transition: color 0.15s;
+        }
+
+        th:hover {
+            color: var(--gold-light);
+        }
+
+        th.sorted {
+            color: var(--gold-light);
+        }
+
+        th .sort-arrow {
+            margin-left: 0.3rem;
+            opacity: 0.6;
+        }
+
+        th.sorted .sort-arrow {
+            opacity: 1;
+        }
+
+        tbody tr {
+            border-bottom: 1px solid var(--parchment-darker);
+            transition: background 0.15s;
+        }
+
+        tbody tr:hover {
+            background: rgba(200, 148, 10, 0.06);
+        }
+
+        tbody tr:nth-child(even) {
+            background: rgba(0, 0, 0, 0.025);
+        }
+
+        tbody tr:nth-child(even):hover {
+            background: rgba(200, 148, 10, 0.06);
+        }
+
+        td {
+            padding: 0.65rem 1rem;
+            vertical-align: top;
+        }
+
+        .td-rank {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--muted);
+            width: 2.5rem;
+            text-align: right;
+            padding-right: 0.5rem;
+        }
+
+        .td-title a {
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 600;
+            line-height: 1.3;
+            display: block;
+        }
+
+        .td-title a:hover {
+            color: var(--accent-light);
+            text-decoration: underline;
+        }
+
+        .td-channel {
+            color: var(--muted);
+            font-size: 0.82rem;
+            margin-top: 0.2rem;
+            font-style: italic;
+        }
+
+        .td-channel a {
+            color: var(--muted);
+            text-decoration: none;
+        }
+
+        .td-channel a:hover {
+            color: var(--ink);
+            text-decoration: underline;
+        }
+
+        .td-views {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.82rem;
+            white-space: nowrap;
+            color: var(--ink);
+            font-weight: 600;
+        }
+
+        .td-dur {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.78rem;
+            color: var(--muted);
+            white-space: nowrap;
+        }
+
+        .td-date {
+            font-size: 0.8rem;
+            color: var(--muted);
+            white-space: nowrap;
+        }
+
+        .td-subs {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.78rem;
+            color: var(--muted);
+            white-space: nowrap;
+        }
+
+        .badge {
+            display: inline-block;
+            font-size: 0.62rem;
+            font-family: 'JetBrains Mono', monospace;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            padding: 0.15rem 0.4rem;
+            margin-left: 0.4rem;
+            vertical-align: middle;
+        }
+
+        .badge-hot {
+            background: var(--accent);
+            color: var(--parchment);
+        }
+
+        .badge-short {
+            background: var(--gold);
+            color: var(--ink);
+        }
+
+        .badge-long {
+            background: #2a5a3a;
+            color: #a8d8b8;
+        }
+
+        .empty,
+        .loading,
+        .error-msg {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: var(--muted);
+            font-style: italic;
+            font-size: 1.1rem;
+        }
+
+        .error-msg {
+            color: var(--accent);
+        }
+
+        .loading::after {
+            content: '';
+            display: inline-block;
+            width: 1rem;
+            height: 1rem;
+            border: 2px solid var(--border);
+            border-top-color: var(--gold);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin-left: 0.8rem;
+            vertical-align: middle;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 1.2rem;
+            border-top: 1px solid var(--border);
+            background: var(--parchment-dark);
+        }
+
+        .page-btn {
+            padding: 0.35rem 0.8rem;
+            background: var(--parchment);
+            border: 1px solid var(--border);
+            font-family: 'Crimson Pro', serif;
+            font-size: 0.9rem;
+            cursor: pointer;
+            color: var(--ink);
+            transition: background 0.15s;
+        }
+
+        .page-btn:hover {
+            background: var(--parchment-darker);
+        }
+
+        .page-btn.active {
+            background: var(--ink);
+            color: var(--gold);
+            border-color: var(--ink);
+        }
+
+        .page-btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        .footer {
+            padding: 1rem 2rem;
+            text-align: center;
+            font-size: 0.75rem;
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--muted);
+            border-top: 1px solid var(--border);
+            letter-spacing: 0.05em;
+        }
+
+        .ornament {
+            color: var(--gold);
+            margin: 0 0.5rem;
+        }
+
+        a { color: var(--accent); }
+
+        .per-page-wrap {
+            margin-left: auto;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="page">
+
+        <div class="header">
+            <h1>Monster Week Videos</h1>
+            <div class="subtitle">Pull playlist data to look for videos to watch</div>
+        </div>
+
+        <div class="setup-section">
+            <div class="setup-grid">
+                <div>
+                    <label for="api-key">YouTube Data API Key</label>
+                    <input type="text" id="api-key" placeholder="AIza..." autocomplete="off">
+                </div>
+                <div>
+                    <label for="playlist-id">Playlist ID</label>
+                    <select id="playlist-id"
+                        style="width:100%; padding:0.6rem 0.8rem; background:var(--parchment-dark); border:1px solid var(--border); border-bottom:2px solid var(--muted); font-family:'Crimson Pro',serif; font-size:0.95rem; color:var(--ink); outline:none;">
+                        <option value="PLhckpzteq8k7OgwYwsDT6oCTi6No7O9Th">Fey Week 2026 — Monday</option>
+                        <option value="PLhckpzteq8k7Kyiv6-52jc22n80vDvydP">Fey Week 2026 — Tuesday</option>
+                        <option value="">Fey Week 2026 — Wednesday — (add playlist ID)</option>
+                        <option value="">Fey Week 2026 — Thursday — (add playlist ID)</option>
+                        <option value="">Fey Week 2026 — Friday — (add playlist ID)</option>
+                        <option value="PLhckpzteq8k67wpFjWVU7qP939TNw8fpO">Dragon Week 2026 — Monday</option>
+                        <option value="PLhckpzteq8k6Ou8u3ado7TT-oZS5W314F">Dragon Week 2026 — Tuesday</option>
+                        <option value="PLhckpzteq8k66WIlAMQK5ptTr7kQjNf16">Dragon Week 2026 — Wednesday</option>
+                        <option value="PLhckpzteq8k4dMqdfoFAwmD8hLrKuVsGN">Dragon Week 2026 — Thursday</option>
+                        <option value="PLhckpzteq8k7S32wGp_yhehZsCA7agsj9">Dragon Week 2026 — Friday</option>
+                    </select>
+                </div>
+            </div>
+            <div style="margin-top:1.2rem; display:flex; gap:1rem; align-items:center; flex-wrap:wrap;">
+                <button class="btn" id="fetch-btn" onclick="fetchPlaylist()">Fetch Playlist</button>
+                <span id="status-msg" style="font-style:italic; font-size:0.85rem; color:var(--muted);"></span>
+            </div>
+        </div>
+
+        <div id="controls-wrap" style="display:none;">
+            <div class="controls">
+                <span class="controls-label">Sort</span>
+                <select id="sort-col" onchange="renderTable()">
+                    <option value="position">Playlist Order</option>
+                    <option value="views">Views</option>
+                    <option value="duration">Duration</option>
+                    <option value="published">Published Date</option>
+                    <option value="title">Title</option>
+                    <option value="channel">Channel</option>
+                </select>
+                <select id="sort-dir" onchange="renderTable()">
+                    <option value="asc">Ascending</option>
+                    <option value="desc">Descending</option>
+                </select>
+
+                <span class="controls-label" style="margin-left:1rem;">Filter</span>
+                <input type="search" id="filter-text" placeholder="Title or channel…" oninput="renderTable()">
+
+                <select id="filter-type" onchange="renderTable()">
+                    <option value="all">All lengths</option>
+                    <option value="short">Shorts (≤ 3 min)</option>
+                    <option value="mid">Mid (3–15 min)</option>
+                    <option value="long">Long (15+ min)</option>
+                </select>
+
+                <div class="per-page-wrap">
+                    <span class="controls-label">Per page</span>
+                    <select id="per-page" onchange="renderTable()">
+                        <option value="25">25</option>
+                        <option value="50">50</option>
+                        <option value="100">100</option>
+                        <option value="999">All</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="stats-bar" id="stats-bar"></div>
+        </div>
+
+        <div class="results" id="results">
+            <div class="empty">Get a free key from <a href="https://console.cloud.google.com/" target="_blank">Google Cloud
+                Console</a> → APIs & Services → YouTube Data API v3. Enter above, then click Fetch.</div>
+        </div>
+
+        <div class="pagination" id="pagination" style="display:none;"></div>
+
+        <div class="footer">
+            Built to pull content for <a href="https://www.youtube.com/@MonsterWeek">Monster Week</a>.
+        </div>
+
+    </div>
+
+    <script>
+        let allVideos = [];
+        let currentPage = 1;
+        let sortCol = 'position';
+        let sortDir = 'asc';
+
+        function parseDuration(iso) {
+            const m = iso.match(/PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?/);
+            if (!m) return 0;
+            return (parseInt(m[1] || 0) * 3600) + (parseInt(m[2] || 0) * 60) + parseInt(m[3] || 0);
+        }
+
+        function fmtDuration(secs) {
+            if (!secs) return '—';
+            const h = Math.floor(secs / 3600);
+            const m = Math.floor((secs % 3600) / 60);
+            const s = secs % 60;
+            if (h) return `${h}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+            return `${m}:${String(s).padStart(2, '0')}`;
+        }
+
+        function fmtViews(n) {
+            if (n >= 1000000) return (n / 1000000).toFixed(1) + 'M';
+            if (n >= 1000) return (n / 1000).toFixed(1) + 'K';
+            return n.toString();
+        }
+
+        function fmtDate(iso) {
+            if (!iso) return '—';
+            return iso.slice(0, 10);
+        }
+
+        function status(msg) {
+            document.getElementById('status-msg').textContent = msg;
+        }
+
+        async function fetchPlaylist() {
+            const key = document.getElementById('api-key').value.trim();
+            const playlistId = document.getElementById('playlist-id').value.trim();
+
+            if (!key) { status('⚠ API key required.'); return; }
+            if (!playlistId) { status('⚠ Playlist ID required.'); return; }
+
+            document.getElementById('fetch-btn').disabled = true;
+            document.getElementById('results').innerHTML = '<div class="loading">Fetching playlist</div>';
+            document.getElementById('pagination').style.display = 'none';
+
+            // Save API key
+            localStorage.setItem('mw_api_key', key);
+
+            try {
+                // 1. Get all playlist items (paginated)
+                let pageToken = '';
+                let position = 0;
+                const items = [];
+
+                do {
+                    const url = `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=50&playlistId=${encodeURIComponent(playlistId)}&key=${encodeURIComponent(key)}${pageToken ? '&pageToken=' + pageToken : ''}`;
+                    const res = await fetch(url);
+                    const data = await res.json();
+                    if (data.error) throw new Error(data.error.message);
+                    for (const item of data.items) {
+                        items.push({
+                            position: position++,
+                            videoId: item.snippet.resourceId.videoId,
+                            title: item.snippet.title,
+                            channelTitle: item.snippet.videoOwnerChannelTitle || '—',
+                            channelId: item.snippet.videoOwnerChannelId || '',
+                            publishedAt: item.snippet.publishedAt,
+                        });
+                    }
+                    pageToken = data.nextPageToken || '';
+                    status(`Fetched ${items.length} items…`);
+                } while (pageToken);
+
+                // 2. Fetch video details in batches of 50
+                const videoIds = items.map(i => i.videoId);
+                const details = {};
+
+                for (let i = 0; i < videoIds.length; i += 50) {
+                    const batch = videoIds.slice(i, i + 50).join(',');
+                    const url = `https://www.googleapis.com/youtube/v3/videos?part=statistics,contentDetails&id=${encodeURIComponent(batch)}&key=${encodeURIComponent(key)}`;
+                    const res = await fetch(url);
+                    const data = await res.json();
+                    if (data.error) throw new Error(data.error.message);
+                    for (const v of data.items) {
+                        details[v.id] = {
+                            views: parseInt(v.statistics.viewCount || 0),
+                            duration: parseDuration(v.contentDetails.duration || ''),
+                        };
+                    }
+                    status(`Fetching details… ${Math.min(i + 50, videoIds.length)}/${videoIds.length}`);
+                }
+
+                // 3. Upsert into allVideos by videoId
+                const incoming = items.map(item => ({
+                    ...item,
+                    ...(details[item.videoId] || { views: 0, duration: 0 }),
+                }));
+
+                const videoMap = new Map(allVideos.map(v => [v.videoId, v]));
+                let added = 0, updated = 0;
+                for (const v of incoming) {
+                    if (videoMap.has(v.videoId)) { videoMap.set(v.videoId, v); updated++; }
+                    else { videoMap.set(v.videoId, v); added++; }
+                }
+                allVideos = Array.from(videoMap.values());
+
+                document.getElementById('controls-wrap').style.display = '';
+                status(`✓ ${allVideos.length} total videos (${added} added, ${updated} updated).`);
+                currentPage = 1;
+                renderTable();
+
+            } catch (err) {
+                document.getElementById('results').innerHTML = `<div class="error-msg">Error: ${err.message}</div>`;
+                status('');
+            } finally {
+                document.getElementById('fetch-btn').disabled = false;
+            }
+        }
+
+        function getFiltered() {
+            const text = document.getElementById('filter-text').value.toLowerCase();
+            const type = document.getElementById('filter-type').value;
+
+            return allVideos.filter(v => {
+                if (text && !v.title.toLowerCase().includes(text) && !v.channelTitle.toLowerCase().includes(text)) return false;
+                if (type === 'short' && v.duration > 180) return false;
+                if (type === 'mid' && (v.duration <= 180 || v.duration > 900)) return false;
+                if (type === 'long' && v.duration <= 900) return false;
+                return true;
+            });
+        }
+
+        function getSorted(arr) {
+            const col = document.getElementById('sort-col').value;
+            const dir = document.getElementById('sort-dir').value;
+
+            return [...arr].sort((a, b) => {
+                let va, vb;
+                if (col === 'views') { va = a.views; vb = b.views; }
+                else if (col === 'duration') { va = a.duration; vb = b.duration; }
+                else if (col === 'published') { va = a.publishedAt; vb = b.publishedAt; }
+                else if (col === 'title') { va = a.title.toLowerCase(); vb = b.title.toLowerCase(); }
+                else if (col === 'channel') { va = a.channelTitle.toLowerCase(); vb = b.channelTitle.toLowerCase(); }
+                else { va = a.position; vb = b.position; }
+
+                if (va < vb) return dir === 'asc' ? -1 : 1;
+                if (va > vb) return dir === 'asc' ? 1 : -1;
+                return 0;
+            });
+        }
+
+        function renderTable() {
+            const filtered = getFiltered();
+            const sorted = getSorted(filtered);
+            const perPage = parseInt(document.getElementById('per-page').value);
+            const totalPages = Math.max(1, Math.ceil(sorted.length / perPage));
+            if (currentPage > totalPages) currentPage = 1;
+
+            const pageItems = sorted.slice((currentPage - 1) * perPage, currentPage * perPage);
+
+            // Stats bar
+            const totalViews = filtered.reduce((s, v) => s + v.views, 0);
+            const maxViews = filtered.length ? Math.max(...filtered.map(v => v.views)) : 0;
+            const avgViews = filtered.length ? Math.round(totalViews / filtered.length) : 0;
+            document.getElementById('stats-bar').innerHTML =
+                `<span class="stat">Showing <span>${filtered.length}</span> of <span>${allVideos.length}</span> videos</span>` +
+                `<span class="stat">Total Views <span>${fmtViews(totalViews)}</span></span>` +
+                `<span class="stat">Top Video <span>${fmtViews(maxViews)}</span></span>` +
+                `<span class="stat">Avg Views <span>${fmtViews(avgViews)}</span></span>`;
+
+            // Table
+            if (!pageItems.length) {
+                document.getElementById('results').innerHTML = '<div class="empty">No videos match the current filters.</div>';
+                document.getElementById('pagination').style.display = 'none';
+                return;
+            }
+
+            let html = `<table>
+    <thead><tr>
+      <th class="td-rank">#</th>
+      <th onclick="setSort('title')">Title ${sortArrow('title')}</th>
+      <th onclick="setSort('views')">Views ${sortArrow('views')}</th>
+      <th onclick="setSort('duration')">Duration ${sortArrow('duration')}</th>
+      <th onclick="setSort('published')">Published ${sortArrow('published')}</th>
+    </tr></thead>
+    <tbody>`;
+
+            pageItems.forEach((v, i) => {
+                const rank = (currentPage - 1) * perPage + i + 1;
+
+                html += `<tr>
+      <td class="td-rank">${rank}</td>
+      <td class="td-title">
+        <a href="https://www.youtube.com/watch?v=${v.videoId}" target="_blank">${escHtml(v.title)}</a>
+        
+        <div class="td-channel"><a href="https://www.youtube.com/channel/${v.channelId}" target="_blank">${escHtml(v.channelTitle)}</a></div>
+      </td>
+      <td class="td-views">${fmtViews(v.views)}</td>
+      <td class="td-dur">${fmtDuration(v.duration)}</td>
+      <td class="td-date">${fmtDate(v.publishedAt)}</td>
+    </tr>`;
+            });
+
+            html += '</tbody></table>';
+            document.getElementById('results').innerHTML = html;
+
+            // Pagination
+            if (totalPages <= 1) {
+                document.getElementById('pagination').style.display = 'none';
+            } else {
+                document.getElementById('pagination').style.display = 'flex';
+                let pHtml = `<button class="page-btn" onclick="goPage(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''}>‹ Prev</button>`;
+                for (let p = 1; p <= totalPages; p++) {
+                    if (p === 1 || p === totalPages || Math.abs(p - currentPage) <= 2) {
+                        pHtml += `<button class="page-btn ${p === currentPage ? 'active' : ''}" onclick="goPage(${p})">${p}</button>`;
+                    } else if (Math.abs(p - currentPage) === 3) {
+                        pHtml += `<span style="color:var(--muted); padding:0 0.3rem;">…</span>`;
+                    }
+                }
+                pHtml += `<button class="page-btn" onclick="goPage(${currentPage + 1})" ${currentPage === totalPages ? 'disabled' : ''}>Next ›</button>`;
+                document.getElementById('pagination').innerHTML = pHtml;
+            }
+        }
+
+        function setSort(col) {
+            const current = document.getElementById('sort-col').value;
+            if (current === col) {
+                const dir = document.getElementById('sort-dir');
+                dir.value = dir.value === 'asc' ? 'desc' : 'asc';
+            } else {
+                document.getElementById('sort-col').value = col;
+                document.getElementById('sort-dir').value = col === 'views' ? 'desc' : 'asc';
+            }
+            currentPage = 1;
+            renderTable();
+        }
+
+        function sortArrow(col) {
+            const current = document.getElementById('sort-col').value;
+            const dir = document.getElementById('sort-dir').value;
+            if (current !== col) return '<span class="sort-arrow">⇅</span>';
+            return `<span class="sort-arrow">${dir === 'asc' ? '↑' : '↓'}</span>`;
+        }
+
+        function goPage(p) {
+            currentPage = p;
+            renderTable();
+            document.querySelector('.page').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function escHtml(s) {
+            return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+        }
+
+        // Pre-fill from URL params if present
+        const params = new URLSearchParams(location.search);
+        if (params.get('list')) document.getElementById('playlist-id').value = params.get('list');
+
+        // Restore API key from localStorage
+        const savedKey = localStorage.getItem('mw_api_key');
+        if (savedKey) document.getElementById('api-key').value = savedKey;
+    </script>
+
+</body>
+
+</html>
