@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Two-Proportion Z-Test (Win Rates)</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: system-ui, sans-serif;
+            background: #fff;
+            color: #000;
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 1rem;
+            }
+        }
+
+        @media (min-width: 600px) {
+            body {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                height: 100vh;
+            }
+        }
+
+        @media (prefers-color-scheme: dark) {
+            body {
+                background: #000;
+                color: #fff;
+            }
+        }
+
+        h1 { font-size: 20px; text-align: center; }
+
+        input { font-size: 16px; }
+
+        input[disabled] { font-size: 14px; font-weight: 600; }
+
+        @media (min-width: 600px) {
+            .input-group {
+                display: grid; grid-template-columns: auto 1fr; gap: 0.5rem 1rem; align-items: center;
+            }
+        }
+
+        .output-group { 
+            display: grid; grid-template-columns: 1fr auto; gap: 0.5rem 1rem; align-items: center; justify-content: end;
+        }
+    </style>
+</head>
+
+<body>
+    <div>
+        <h1>Two-Proportion Z-Test (Win Rates)</h1>
+        <div class="input-group">
+            <div>
+                <div><label for="name1">Name</label></div>
+                <div><input id="name1" placeholder="Label (optional)" /></div>
+                <div><label for="rate1">Win Rate</label></div>
+                <div><input type="number" id="rate1" placeholder="60 %" oninput="onStateChange()" /></div>
+                <div><label for="games1">Games</label></div>
+                <div><input type="number" id="games1" placeholder="4000" oninput="onStateChange()" /></div>
+                <div><label for="wins1">Wins</label></div>
+                <div><input type="number" id="wins1" disabled /></div>
+            </div>
+            <div>
+                <div><label for="name2">Name</label></div>
+                <div><input id="name2" placeholder="Label (optional)" /></div>
+                <div><label for="rate2">Win Rate</label></div>
+                <div><input type="number" id="rate2" placeholder="60 %" oninput="onStateChange()" /></div>
+                <div><label for="games2">Games</label></div>
+                <div><input type="number" id="games2" placeholder="4000" oninput="onStateChange()" /></div>
+                <div><label for="wins2">Wins</label></div>
+                <div><input type="number" id="wins2" disabled /></div>
+            </div>
+        </div>
+        <hr />
+        <div class="output-group">
+            <div><label for="pp">Pooled Win %</label></div>
+            <div><input type="number" id="pp" disabled /></div>
+            <div><label for="se">Standard Error</label></div>
+            <div><input type="number" id="se" disabled /></div>
+            <div><label for="z">Z Score</label></div>
+            <div><input type="number" id="z" disabled /></div>
+            <div><label for="pValue">p-value</label></div>
+            <div><input type="number" id="pValue" disabled /></div>
+        </div>
+        <div style="text-align: center; padding-top: 1rem;">
+            <button onclick="copyResults()">Copy Results</button>
+        </div>
+        
+    </div>
+    <script>
+        /// Abramowitz & Stegun approximation of p-value from a Z Score.
+        Math.zToP = function(z) {
+            const absZ = Math.abs(z);
+            const a1 = 0.254829592, a2 = -0.284496736, a3 = 1.421413741;
+            const a4 = -1.453152027, a5 = 1.061405429, p = 0.3275911;
+            const t = 1.0 / (1.0 + p * absZ / Math.SQRT2);
+            const erf = 1 - (((((a5 * t + a4) * t) + a3) * t + a2) * t + a1) * t * Math.exp(-absZ * absZ / 2);
+            return 2 * (1 - (0.5 * (1 + erf)));
+        }
+
+        function onStateChange() {
+            let r1 = parseFloat(document.getElementById('rate1').value) / 100;
+            let n1 = parseInt(document.getElementById('games1').value);
+            let r2 = parseFloat(document.getElementById('rate2').value) / 100;
+            let n2 = parseInt(document.getElementById('games2').value);
+
+            let wins1 = 0;
+            let wins2 = 0;
+            let pp = 0; // pooled proportion (p̂)
+            let SE = 0; // Standard Error
+            let z = 0; // Z Score
+            let pValue = 0;
+
+            if (r1 && n1) {
+                wins1 = r1 * n1;
+            }
+
+            if (r2 && n2) {
+                wins2 = r2 * n2;
+            }
+            
+            if (wins1 && wins2) {
+                pp = (wins1 + wins2) / (n1 + n2);
+                SE = Math.sqrt(pp * (1 - pp) * ((1 / n1) + (1 / n2)));
+                z = (r1 - r2) / SE;
+                pValue = Math.zToP(z);
+            }
+
+            document.getElementById('wins1').value = wins1.toFixed(0);
+            document.getElementById('wins2').value = wins2.toFixed(0);
+            document.getElementById('pp').value = (pp * 100).toFixed(2);
+            document.getElementById('se').value = SE.toFixed(4);
+            document.getElementById('z').value = z.toFixed(2);
+            document.getElementById('pValue').value = pValue < 0.0001
+                ? pValue.toExponential(2)  // "1.23e-6"
+                : pValue.toFixed(4);
+        }
+
+        async function copyResults() {
+            const name1 = document.getElementById('name1').value || 'Card A';
+            const name2 = document.getElementById('name2').value || 'Card B';
+            const r1 = document.getElementById('rate1').value;
+            const n1 = document.getElementById('games1').value;
+            const r2 = document.getElementById('rate2').value;
+            const n2 = document.getElementById('games2').value;
+            const z = document.getElementById('z').value;
+            const p = document.getElementById('pValue').value;
+
+            const text = `${name1}: ${r1}% (n=${n1})\n${name2}: ${r2}% (n=${n2})\nz=${z}, p=${p}`;
+            await navigator.clipboard.writeText(text);
+        }
+
+        onStateChange();
+    </script>
+</body>
+
+</html>
