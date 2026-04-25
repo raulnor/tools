@@ -10,6 +10,8 @@
       runs-on: ubuntu-latest
       steps:
         - uses: actions/checkout@v4
+        - name: Build index
+          run: python3 build_index.py
         - name: Deploy
           uses: cloudflare/wrangler-action@v3
           with:
