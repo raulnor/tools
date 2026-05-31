@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Drow (Tier'Dal) Names</title>
+</head>
+
+<style>
+    .none { display: none; }
+</style>
+
+<script>
+    const male = [
+        "Antian", "Belux", "Divn", "Felox", "Gath", 
+        "Litz", "Psal", "Niz", "Tolax", "Zartox"];
+    const female = [
+        "Andara", "Camia", "Dissa", "Issva", "Marza",
+        "Opal", "Petra", "Rista", "Tizzy", "Vissa"];
+    const surnames = [
+        "B`Div", "C`Luzz", "D`Vinn", "F`Lox", "G`Noir",
+        "Kix", "L`Crit", "N`Mar", "S`Lon", "V`Retta", 
+        "X`Ta"];
+
+    Array.prototype.roll = function () {
+        let n = Math.floor(Math.random() * this.length);
+        return this[n];
+    };
+
+    function generate() {
+        const ol = document.getElementById('name-list');
+        if (!ol) { return; }
+        const s = document.getElementById('gender');
+        if (!s) { return; }
+        const sex = s.value;
+        ol.innerHTML = "";
+        for (var i = 0; i < 10; i++) {
+            const li = document.createElement("li");
+            if (sex == "M") {
+                li.innerText = `${male.roll()} ${surnames.roll()}`;
+            } else {
+                li.innerText = `${female.roll()} ${surnames.roll()}`;
+            }
+            ol.appendChild(li);
+        }
+        ol.classList = "";
+    }
+</script>
+
+<body>
+    <h1>Drow (Tier'Dal) Names</h1>
+    <label>
+        Gender
+        <select id="gender" onchange="generate()">
+            <option value="M">Male</option>
+            <option value="F">Female</option>
+        </select>
+    </label>
+    <button onclick="generate();">Generate</button>
+    <ol id="name-list" class="none">
+        <li>Niv V`Mar</li>
+        <li>Niv V`Mar</li>
+        <li>Niv V`Mar</li>
+    </ol>
+</body>
+</html>
