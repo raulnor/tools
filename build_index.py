@@ -2,12 +2,14 @@
 import glob
 import os
 
-pages = sorted(glob.glob("*.html"))
-pages = [p for p in pages if p != "index.html"]
 
-items = "\n".join(f'    <a href="{p}">{os.path.splitext(p)[0]}</a><br>' for p in pages)
+def build_index():
+    pages = sorted(glob.glob("*.html"))
+    pages = [p for p in pages if p != "index.html"]
 
-html = f"""<!DOCTYPE html>
+    items = "\n".join(f'    <a href="{p}">{os.path.splitext(p)[0]}</a><br>' for p in pages)
+
+    html = f"""<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -24,7 +26,11 @@ html = f"""<!DOCTYPE html>
 </html>
 """
 
-with open("index.html", "w") as f:
-    f.write(html)
+    with open("index.html", "w") as f:
+        f.write(html)
 
-print(f"Generated index.html with {len(pages)} pages.")
+    print(f"Generated index.html with {len(pages)} pages.")
+
+
+if __name__ == "__main__":
+    build_index()
