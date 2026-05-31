@@ -23,15 +23,49 @@
 
     <script>
         const male = [
-            "Antian", "Belux", "Divn", "Felox", "Gath",
-            "Litz", "Psal", "Niz", "Tolax", "Zartox"];
+            "Antian", "Belux", "Camor", "Cazum", "Cizzar",
+            "Degarran", "Divn", "Draxiz", "Draan", "Drizm",
+            "Dunred", "Eolorn", "Eruvin", "Evin", "Felok",
+            "Friz", "Frizin", "Garren", "Gath", "Genzal",
+            "Glazin", "Glazn", "Grazis", "Halvn", "Hekzin",
+            "Hutyn", "Isvan", "Ithvol", "Jabon", "Jacum",
+            "Jarrex", "Jerris", "Jsvan", "Jusar", "Kanthu",
+            "Kerton", "Kis", "Klan", "Krizin", "Krizon",
+            "Kszan", "Lisvan", "Lisv", "Litz", "Lokar",
+            "Mak", "Marenkor", "Mariz", "Mavin", "Medron",
+            "Misar", "Mizr", "Molon", "Nallar", "Narex",
+            "Niz", "Noxhil", "Olak", "Olavn", "Opizel",
+            "Pazin", "Perrir", "Psal", "Ratraz", "Riv",
+            "Ryoz", "Sazan", "Seloxia", "Sivy", "Sol",
+            "Svlis", "Syrn", "Tal", "Telnor", "Tenso",
+            "Tkaz", "Tralon", "Trik", "Trizam", "Tzanso",
+            "Ulraz", "Utvex", "Vivish", "Volkoon", "Xantis",
+            "Xon", "Yally", "Yaz", "Yegek", "Zanotix", "Zartox"];
         const female = [
-            "Andara", "Camia", "Dissa", "Issva", "Marza",
-            "Opal", "Petra", "Rista", "Tizzy", "Vissa"];
+            "Andara", "Aslyn", "Belyea", "Camia", "Cecile",
+            "Dianax", "Dissa", "Dizra", "Drisi", "Frivsa",
+            "Gasia", "Issva", "Issia", "Jayna", "Jucra",
+            "Jys", "Katara", "Kis", "Kizya", "Krivn",
+            "Krystiana", "Lisvan", "Lizza", "Loveal", "Lyniv",
+            "Lysanda", "Mare", "Marza", "Mikaela", "Misal",
+            "Mirzna", "Myrva", "Mys", "Myris", "Opal",
+            "Petra", "Pisna", "Ranza", "Razran", "Rista",
+            "Rizyra", "Rysva", "Shanez", "Svlia", "Tani",
+            "Tizzy", "Trista", "Ulazia", "Vala", "Veca",
+            "Verina", "Vissa", "Yala"];
         const surnames = [
-            "B`Div", "C`Luzz", "D`Vinn", "F`Lox", "G`Noir",
-            "Kix", "L`Crit", "N`Mar", "S`Lon", "V`Retta",
-            "X`Ta"];
+            "B`Div", "B`Doph", "B`Larin", "C`Luzz", "D`Bious",
+            "D`Dbth", "D`Jerna", "D`Unnar", "D`Vek", "Din`a",
+            "F`Lok", "F`Mazz", "G`Efia", "G`Noir", "G`Zule",
+            "H`Rugla", "Ixtaz", "J`Axx", "J`Narus", "J`Ver",
+            "K`Jartan", "K`Jasn", "K`Tarn", "Kixl", "L`Crit",
+            "L`Lozz", "M`Rekkor", "M`Trik", "N`Mar", "N`Mare",
+            "N`Ryt", "N`Tan", "Punox", "Q`Tentu", "Quexill",
+            "R`Dev", "R`Jyen", "Ru`Soe", "S`Ion", "S`Karn",
+            "S`Kor", "S`Lon", "S`Nez", "S`Tai", "T`Kix",
+            "T`Vem", "T`plth", "To`Biath", "Tolax", "V`Lask",
+            "V`Retta", "V`Sek", "W`Selo", "X`Lottl", "X`Ta",
+            "X`Teria", "Y`Lask", "Zexus"];
 
         function pick(arr) {
             return arr[Math.floor(Math.random() * arr.length)];
