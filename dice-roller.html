@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <title>Dice Roller</title>
+    <style>
+        a { color: #6b3fa0; }
+        html, body { height: 100dvh; margin: 0; padding: 0; }
+        body {
+            font-family: sans-serif;
+            display: flex;
+            flex-direction: column;
+            max-height: 100dvh;
+        }
+        button {
+            background: #6b3fa0;
+            color: #ffffff;
+            border: 1px solid #9060c8;
+            border-radius: 4px;
+            padding: 0.35em 1em;
+            font-size: 16px;
+            cursor: pointer;
+            margin-left: 0.5em;
+            touch-action: manipulation;
+        }
+        button:hover { background: #7d4fb8; }
+        h1 { font-size: 1.4em; margin: 0; }
+        input, ul { font-size: 1.2em; }
+        ul { margin: 0; padding: 1em; line-height: 1.5; list-style: none; }
+        .row {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            padding: 1em;
+        }
+        .main {
+            overflow-y: scroll;
+            flex-grow: 1;
+        }
+        @media (prefers-color-scheme: dark) {
+            a { color: #fa4faa; }
+            body { background: #0d0010; color: #ffffff; }
+            button {
+                background: #3b1a5e;
+                color: #ffffff;
+                border: 1px solid #7a4faa;
+            }
+            button:hover { background: #5a2d8a; }
+            input { background: #050505; color: #ffffff; }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="row header">
+        <h1>Dice Roller</h1>
+        <a onclick="clearHistory()" href="javascript:void(0)">Clear</a>
+    </div>
+    <ul id="roll-history" class="main"></ul>
+    <div class="row footer">
+        <input id="count" placeholder="6">
+        <button onclick="roll();">Roll</button>
+    </div>
+    <script>
+        const list = document.getElementById('roll-history');
+        const input = document.getElementById('count');
+
+        function roll() {
+            const n = parseInt(input.value, 10);
+            if (!n || n <= 0) { return; }
+            const x = Math.floor(Math.random() * n) + 1;
+            const li = document.createElement("li");
+            li.innerText = `${x}`;
+            list.appendChild(li);
+            list.scrollTop = list.scrollHeight;
+        }
+
+        function clearHistory() {
+            list.innerHTML = "";
+        }
+
+        document.getElementById('count').addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') roll();
+        });
+    </script>
+</body>
+</html>
